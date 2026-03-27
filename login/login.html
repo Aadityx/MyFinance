@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+   /* ----------------- DARK THEME LOGIN PAGE ----------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #0f172a;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.box {
+  background-color: #1e293b; /* matches page container style */
+  padding: 40px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  transition: all 0.3s ease;
+}
+
+.box:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9);
+  transform: translateY(-2px);
+}
+
+h2 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 14px 20px 14px 45px;
+  border-radius: 10px;
+  border: 1px solid #334155; /* subtle dark border */
+  background-color: #1e293b;
+  color: #fff;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid #4f46e5; /* accent color */
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8; /* muted icon color */
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+input:focus + .input-icon {
+  color: #4f46e5;
+}
+
+button {
+  width: 100%;
+  padding: 14px 0;
+  background-color: #4f46e5; /* consistent accent */
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.toggle {
+  text-align: center;
+  padding: 14px;
+  color: #4f46e5;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.toggle:hover {
+  background: rgba(79, 70, 229, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .box {
+    padding: 32px 24px;
+    margin: 10px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+}
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2 id="title">Login</h2>
+
+  <div class="input-group">
+    <input type="email" id="email" placeholder="Email">
+    <i class="fas fa-envelope input-icon"></i>
+  </div>
+
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Password">
+    <i class="fas fa-lock input-icon"></i>
+  </div>
+
+  <button onclick="handleAuth()">
+    <i class="fas fa-sign-in-alt"></i> Login
+  </button>
+
+  <div class="toggle" onclick="goToRegister()">
+  Don't have an account? Sign up
+</div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+  // 🔥 Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBeY5noIZbapkdJiGUHkZ1f2Q8B8iyzUtQ",
+    authDomain: "zion-542a2.firebaseapp.com",
+    databaseURL: "https://zion-542a2-default-rtdb.firebaseio.com",
+    projectId: "zion-542a2",
+    storageBucket: "zion-542a2.firebasestorage.app",
+    messagingSenderId: "472333505699",
+    appId: "1:472333505699:web:51af49a05dec65e5bd9b16",
+    measurementId: "G-67VN2GX0DE"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  let isLogin = true;
+
+  // 🔄 Toggle Login / Signup
+  window.toggleMode = function () {
+    isLogin = !isLogin;
+
+    document.getElementById("title").innerText = isLogin ? "Login" : "Sign Up";
+    document.querySelector("button").innerHTML = isLogin ? 
+      '<i class="fas fa-sign-in-alt"></i> Login' : 
+      '<i class="fas fa-user-plus"></i> Sign Up';
+    document.querySelector(".toggle").innerText =
+      isLogin ? "Don't have an account? Sign up" : "Already have an account? Login";
+  };
+
+  // 🔐 Handle Auth
+  window.handleAuth = async function () {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+      alert("Fill all fields");
+      return;
+    }
+
+    try {
+      if (isLogin) {
+        // 🔑 Login
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login successful!");
+      } else {
+        // 🆕 Signup
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("Account created!");
+      }
+
+      // Redirect
+window.location.href = "../dashboard/dashboard.html";
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+ window.goToRegister = function () {
+    window.location.href = "register.html";
+ }
+
+</script>
+
+</body>
+</html>

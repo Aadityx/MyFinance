@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="script.js"></script></head>
+<body>
+
+  <div class="container">
+
+    <!-- 🔹 SIDEBAR -->
+    <div class="sidebar-container">
+
+  <!-- 🔹 SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>💸 MyFinance</h2>
+    </div>
+
+    <ul class="sidebar-menu">
+      <!-- Dashboard -->
+      <li data-section="dashboard" onclick="showSection('dashboardSection')">
+        <span class="icon">📊</span>
+        <span class="title">Dashboard</span>
+      </li>
+
+      <!-- Add Expense -->
+      <li data-section="addExpense" onclick="showSection('addSection')">
+        <span class="icon">➕</span>
+        <span class="title">Add Expense</span>
+      </li>
+
+      <!-- History -->
+      <li data-section="history" onclick="showSection('historySection')">
+        <span class="icon">📜</span>
+        <span class="title">History</span>
+      </li>
+    </ul>
+    <button id="logoutBtn" class="sidebar-logout">🚪 Logout</button>
+  </aside>
+
+</div>
+
+    <!-- 🔹 MAIN CONTENT -->
+    <div class="main">
+
+      <!-- 🟢 DASHBOARD + INSIGHTS -->
+      <div id="dashboardSection" class="section">
+
+        <h1>Dashboard</h1>
+
+        <!-- Cards -->
+        <div class="card-container">
+          <div class="card">
+            <h3>Total Spent</h3>
+            <p id="totalSpent"></p>
+          </div>
+
+          <div class="card">
+            <h3>This Month</h3>
+            <p id="monthlySpent"></p>
+          </div>
+
+          <div class="card">
+            <h3>Top Category</h3>
+            <p id="topCategory"></p>
+          </div>
+
+          <div class="card warning">
+            <h3>Impulse Spending</h3>
+            <p id="impulsePercent"></p>
+          </div>
+        </div>
+
+        <!-- Insights -->
+        <div class="insights">
+          <h2>Insights</h2>
+
+          <div class="insight-box"></div>
+          <div class="insight-box"></div>
+          <div class="insight-box"></div>
+        </div>
+
+        <!-- Charts -->
+        <h2>Spending Behavior</h2>
+        <div class="chart-grid">
+
+          <div class="chart-box">
+            <h3>Impulse Spending</h3>
+            <canvas id="impulseChart"></canvas>
+          </div>
+
+          <div class="chart-box">
+            <h3>Planned Spending</h3>
+            <canvas id="plannedChart"></canvas>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 🟡 ADD EXPENSE -->
+      <div id="addSection" class="section" style="display:none;">
+        <div class="add-container">
+
+          <!-- LEFT: FORM -->
+          <div class="left-panel">
+            <h1>Add Expense</h1>
+
+            <form id="expenseForm">
+
+              <div class="input-group">
+                <label>Title</label>
+                <input type="text" id="title" placeholder="e.g. Dinner, Fuel" required />
+              </div>
+
+              <div class="input-group">
+                <label>Amount</label>
+                <input type="number" id="amount" placeholder="₹ Enter amount" required />
+              </div>
+
+              <div class="input-group">
+                <label>Category</label>
+                <select id="category">
+                  <option value="">Select Category</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label>Type</label>
+                <select id="type">
+                  <option value="">Select Type</option>
+                  <option value="impulse">Impulse</option>
+                  <option value="planned">Planned</option>
+                </select>
+              </div>
+
+              <button type="submit">+ Add Expense</button>
+            </form>
+          </div>
+
+          <!-- RIGHT: HISTORY -->
+          <div class="right-panel">
+            <div class="history-header">
+                <h2>Recent Expenses</h2>
+                <span id="historyCount">0</span>
+            </div>
+
+            <div class="recent-table-container">
+                <table class="recent-table">
+                <thead>
+                    <tr>
+                    <th>Title</th>
+                    <th>Amount (₹)</th>
+                    </tr>
+                </thead>
+                <tbody id="recentList">
+                    <!-- JS will populate rows here -->
+                </tbody>
+                </table>
+            </div>
+            </div>
+
+        </div>
+      </div>
+
+      <!-- 🔵 HISTORY -->
+      <div id="historySection" class="section" style="display:none;">
+
+        <!-- HEADER -->
+        <div class="history-header">
+          <div class="header-left">
+            <h1 class="history-title">
+              Transaction <span>Insights</span>
+            </h1>
+            <p class="history-subtitle">
+              Track your spending patterns and behavior
+            </p>
+          </div>
+
+          <div class="header-right">
+            <span class="history-count">0 records</span>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="history-table">
+
+          <!-- TABLE HEAD -->
+          <div class="table-head">
+            <span>No</span>
+            <span>Name</span>
+            <span>Date</span> <!-- NEW COLUMN -->
+            <span>Type</span>
+            <span>Mode</span>
+            <span>Amount</span>
+        </div>
+
+          <!-- TABLE BODY (JS WILL FILL) -->
+          <div class="table-body" id="historyTableBody">
+            <!-- Firebase will populate rows -->
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
