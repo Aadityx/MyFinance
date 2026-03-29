@@ -57,21 +57,14 @@ We built a **smart expense tracking web application** that helps users monitor a
 
 ## 🤝 Contributors
 
-* Your Name
+* Aaditya
 * Vallabh
-
----
-
-## 🔗 GitHub Repository
-
-[Add your GitHub project link here]
 
 ---
 
 ## ⭐ Acknowledgement
 
 Developed as part of the **ZION Coding Event**.
-
 ---
 
 > ⚡ From idea to execution in just 3 hours.
